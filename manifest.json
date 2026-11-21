@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "LingQ Quick Sentence Mode Toggle",
+  "version": "1.1.0",
+  "description": "Adds an inline hover button at the end of each sentence in LingQ to jump directly between Scroll Mode and Sentence Mode at that exact sentence.",
+  "content_scripts": [
+    {
+      "matches": ["https://www.lingq.com/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "lingq-sentence-toggle@community.local"
+    }
+  }
+}

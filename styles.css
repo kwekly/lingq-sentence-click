@@ -1,0 +1,119 @@
+/* Inline toggle button attached to the END of each .reader-sentence.
+   Uses a negative right margin equal to its width so it takes up 0px in text flow
+   and never indents, wraps, or creates gaps between sentences in a paragraph. */
+.lingq-mode-toggle-btn {
+  position: relative;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-left: 2px;
+  margin-right: -24px;
+  padding: 0;
+  border: 1px solid rgba(59, 130, 246, 0.45);
+  border-radius: 5px;
+  background-color: rgba(30, 41, 59, 0.92);
+  color: #f8fafc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  cursor: pointer;
+  vertical-align: middle;
+  transform: translateY(-1px) scale(0.92);
+  /* When mouse leaves: stay visible & clickable for 0.7s, then gently fade out over 0.35s */
+  transition:
+    opacity 0.35s ease 0.7s,
+    transform 0.35s ease 0.7s,
+    visibility 0s linear 1.05s,
+    background-color 0.15s ease 0s,
+    border-color 0.15s ease 0s;
+  user-select: none;
+  line-height: 1;
+}
+
+/* Invisible hover cushion around the button so moving the cursor from the period
+   to the button never drops the hover state */
+.lingq-mode-toggle-btn::before {
+  content: "";
+  position: absolute;
+  inset: -7px -7px -7px -10px;
+}
+
+/* Show immediately (0s delay) when hovering over the sentence or the button itself */
+.reader-sentence:hover .lingq-mode-toggle-btn,
+.lingq-mode-toggle-btn:hover,
+.lingq-mode-toggle-btn:focus-visible {
+  opacity: 0.94;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(-1px) scale(1);
+  transition:
+    opacity 0.12s ease 0s,
+    transform 0.12s ease 0s,
+    visibility 0s linear 0s,
+    background-color 0.15s ease 0s,
+    border-color 0.15s ease 0s;
+}
+
+.lingq-mode-toggle-btn:hover {
+  z-index: 60;
+  opacity: 1 !important;
+  background-color: rgb(37, 99, 235);
+  border-color: rgb(96, 165, 250);
+  transform: translateY(-1px) scale(1.1) !important;
+}
+
+.lingq-mode-toggle-btn:active {
+  transform: translateY(-1px) scale(0.95) !important;
+}
+
+.lingq-mode-toggle-btn svg {
+  width: 13px;
+  height: 13px;
+  pointer-events: none;
+}
+
+/* Slightly larger button at the end of the sentence in Sentence Mode */
+p.m-0 .lingq-mode-toggle-btn,
+.lingq-mode-toggle-btn[data-current-mode="sentence"] {
+  width: 24px;
+  height: 24px;
+  margin-left: 5px;
+  margin-right: -29px;
+}
+
+p.m-0 .lingq-mode-toggle-btn svg,
+.lingq-mode-toggle-btn[data-current-mode="sentence"] svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Temporary highlight pulse when returning to Scroll Mode at the target sentence */
+@keyframes lingq-sentence-flash {
+  0% {
+    background-color: rgba(59, 130, 246, 0.32);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.lingq-sentence-target-flash {
+  border-radius: 4px;
+  animation: lingq-sentence-flash 1.8s ease-out forwards;
+}
+
+/* Hide the Radix dropdown menu while our script silently switches modes so it never flickers on screen */
+body.lingq-silent-mode-switch [data-radix-popper-content-wrapper],
+body.lingq-silent-mode-switch [role="menu"] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
